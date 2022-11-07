@@ -1,21 +1,36 @@
 import React, { useEffect, useState } from "react"
-import { getEvents } from "../../managers/EventManager.js"
+import { useNavigate } from 'react-router-dom'
+import { getEvents, getGames } from "../../managers/EventManager.js"
 
-export const EventList = (props) => {
+export const EventList = () => {
     const [ events, setEvents ] = useState([])
+    const [ games, setGames ] = useState([])
+    const [ users, setUsers ] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
-        getEvents().then(data => setEvents(data))
+        getEvents().then(eventArray => setEvents(eventArray))
     }, [])
+
+    useEffect(() => {
+        getGames().then(gamesArray => setGames(gamesArray))
+    }, [])
+
 
     return (
         <article className="events">
+                <button className="btn btn-2 btn-sep icon-create"
+            onClick={() => {
+                navigate({ pathname: "/events/new" })
+            }}
+        >Register New Event</button>
             {
                 events.map(event => {
                     return <section key={`event--${event.id}`} className="event">
-                        <div className="event__description">{event.description} by {event.organizer}</div>
-                        <div className="event__game">{event.game} will be played</div>
-                        <div className="event__date">Event is on {event.date} at {event.time}</div>
+                        <div className="event__description">Let's play {event?.game?.title} organized by {event?.organizer?.username}</div>
+                        <div className="event__info">Event Details: {event.description}.</div>
+                        <div className="event__info">Date: {event.date} at {event.time}</div>
+                        
                     </section>
                 })
             }
