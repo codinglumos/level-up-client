@@ -1,47 +1,123 @@
-import { createEvent } from "@testing-library/react"
+//import { createEvent } from "@testing-library/react"
 import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
-import { createGame, getGameTypes } from '../../managers/GameManager.js'
+import { getEvents } from "../../managers/EventManager.js"
+import { createEvent, getGameTypes, getUsers, getGames} from '../../managers/EventManager.js'
+//import DatePicker from "react-datepicker"
 
 
 export const EventForm = () => {
     const navigate = useNavigate()
-    const [events, setEvents] = useState([])
+    const [event, setEvents] = useState([])
+    const [gameTypes, setGameTypes] = useState([])
+    const [users, setUsers] = useState([])
+    const [game, setGames] = useState([])
+    //const [date, setDate] = useState(new Date())
 
     /*
         Since the input fields are bound to the values of
         the properties of this state variable, you need to
         provide some default values.
     */
-    const [currentEvent, setCurrentEvent] = useState({
-        game: 0,
+    const [newEvent, setNewEvent] = useState({
+        game: "",
         description: "",
         date: "",
         time: "",
-        organizer: 0
+        organizer: ""
     })
 
     useEffect(() => {
         // TODO: Get the game types, then set the state
+    getEvents()
+    .then((eventArray) => {
+        setEvents(eventArray)
+    })
     }, [])
 
-    const changeGameState = (domEvent) => {
+
+    useEffect(() => {
+        // TODO: Get the game types, then set the state
+        getGames()
+        .then((gameArray) => {
+            setGames(gameArray)
+        })
+    }, [])
+    const changeEventState = (evt) => {
         // TODO: Complete the onChange function
+        const eventToAPI = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                game: game.title,
+                description: event.description,
+                organizer: event.organizer,
+                date: event.date,
+                time: event.time
+            })
+        }
+
+        return fetch("http://localhost:8000/events", eventToAPI)
+            .then(() => {
+               navigate("/events")
+            })
     }
 
     return (
-        <form className="gameForm">
-            <h2 className="gameForm__title">Register New Game</h2>
+        <form className="eventForm">
+            <h2 className="eventForm__game">Register New Event</h2>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="title">Title: </label>
-                    <input type="text" name="title" required autoFocus className="form-control"
-                        value={currentGame.title}
-                        onChange={changeGameState}
+                    <label htmlFor="game">Game: </label>
+                    <input type="text" name="game" required autoFocus className="form-control"
+                        value={newEvent.game}
+                        onChange={(evt) => {
+                            const copy = structuredClone(event)
+                            copy.game = evt.target.value
+                            setNewEvent(copy)
+                        }}
                     />
                 </div>
             </fieldset>
-
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="description">Description: </label>
+                    <input type="text" name="description" required autoFocus className="form-control"
+                        value={newEvent.description}
+                        onChange={(evt) => {
+                            const copy = structuredClone(event)
+                            copy.description = evt.target.value
+                            setNewEvent(copy)
+                        }}
+                    />
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="organizer">Organizer: </label>
+                    <input type="text" name="organizer" required autoFocus className="form-control"
+                        value={newEvent.organizer}
+                        onChange={(evt) => {
+                            const copy = structuredClone(event)
+                            copy.organizer = evt.target.value
+                            setNewEvent(copy)
+                        }}
+                    />
+                </div>
+            </fieldset>
+            {/* <fieldset>
+                <div className="select">
+                    <label className="date" htmlFor="date">Date:</label>
+                    <DatePicker 
+                    className="form-control" selected={date} onChange={(date) => {
+                    const copy = structuredClone(event)
+                    copy.date = date
+                    setDate(date)
+                    setNewEvent(copy)}}/>
+                </div>
+            </fieldset> */}
             {/* TODO: create the rest of the input fields */}
 
             <button type="submit"
@@ -50,11 +126,11 @@ export const EventForm = () => {
                     evt.preventDefault()
 
                     const game = {
-                        maker: currentGame.maker,
-                        title: currentGame.title,
-                        number_of_players: parseInt(currentGame.numberOfPlayers),
-                        skill_level: parseInt(currentGame.skillLevel),
-                        game_type: parseInt(currentGame.gameTypeId)
+                        title: newEvent.title,
+                        description: newEvent.description,
+                        organizer: parseInt(newEvent.organizer),
+                        date: parseInt(newEvent.date),
+                        time: parseInt(newEvent.time)
                     }
 
                     // Send POST request to your API

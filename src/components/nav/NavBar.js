@@ -7,9 +7,7 @@ export const NavBar = () => {
         <ul className="navbar">
             <li className="navbar__item">
             <Link className="navbar__link" to="/games">Game List</Link>            </li>
-            <li className="navbar__item">
-            <Link to="/creategames" className="navbar-item">New Game Form</Link>
-            </li>
+        
             {/* <li className="navbar__item">
             <Link to="/gametypes" className="navbar-item">Game Type List</Link>
             </li> */}

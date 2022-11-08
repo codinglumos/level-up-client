@@ -5,7 +5,9 @@ import { createGame, getGameTypes, getUsers, getGames } from '../../managers/Gam
 
 export const GameForm = () => {
     const navigate = useNavigate()
-    const [game, setGames] = useState([])
+    const [games, setGames] = useState([])
+    // const [gameTypes, setGameTypes] = useState([])
+    // const [users, setUsers] = useState([])
    
     const [newGame, setNewGame] = useState({
         skillLevel: 0,
@@ -16,30 +18,36 @@ export const GameForm = () => {
     })
 
     useEffect(() => {
-        // TODO: Get the game types, then set the state
-        getGameTypes()
-        getUsers()
+        // TODO: Get the games, then set the state
         getGames()
-    }, [])
+        .then((gameArray) => {
+            setGames(gameArray)
+        })
+            
+    }, []
+    )
 
       const changeGameState = (evt) => {
         evt.preventDefault()
 
         const gameToAPI = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                skillLevel: game.skillLevel,
-                numberOfPlayers: game.numberOfPlayers,
-                title: game.title,
-                maker: game.maker,
-                gameTypeId: game.gameTypeId
-            })
+                skillLevel: newGame.skillLevel,
+                numberOfPlayers: newGame.numberOfPlayers,
+                title: newGame.title,
+                maker: newGame.maker,
+                gameTypeId: newGame.gameTypeId        
         }
+        return createGame(gameToAPI)
+        // return fetch("http://localhost:8000/games", {
+        //     method:"POST",
+        //     headers: {
+        //         ,
+        //         "Authorization": `Token ${localStorage.getItem("lu_token")}`
 
-        return fetch("http://localhost:8000/games", gameToAPI)
+        //     },
+        //     body: JSON.stringify(gameToAPI)
+        // })
+            .then(response => response.json())
             .then(() => {
                navigate("/games")
             })
@@ -48,11 +56,7 @@ export const GameForm = () => {
 
     return (
         <form className="gameForm">
-            <h2 className="gameForm__title"><button className="btn btn-2 btn-sep icon-create"
-    onClick={() => {
-        navigate({ pathname: "/games/new" })
-    }}
->Register New Game</button></h2>
+            <h2 className="gameForm__title"></h2>
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="title">Title: </label>
@@ -60,7 +64,7 @@ export const GameForm = () => {
                         value={newGame.title}
                         onChange={
                             (evt) => {
-                            const copy = structuredClone(game)
+                            const copy = structuredClone(newGame)
                             copy.title = evt.target.value
                             setNewGame(copy)
                         }}
@@ -71,7 +75,7 @@ export const GameForm = () => {
                     <input type="number" name="skillLevel" required autoFocus className="form-control"
                         value={newGame.skillLevel}
                         onChange={(evt) => {
-                            const copy = structuredClone(game)
+                            const copy = structuredClone(newGame)
                             copy.skillLevel = evt.target.value
                             setNewGame(copy)
                         }}
@@ -82,7 +86,7 @@ export const GameForm = () => {
                     <input type="number" name="players" required autoFocus className="form-control"
                         value={newGame.numberOfPlayers}
                         onChange={(evt) => {
-                            const copy = structuredClone(game)
+                            const copy = structuredClone(newGame)
                             copy.numberOfPlayers = evt.target.value
                             setNewGame(copy)
                         }}
@@ -93,24 +97,9 @@ export const GameForm = () => {
 
             {/* TODO: create the rest of the input fields */}
 
-            <button type="submit"
-                onClick={evt => {
-                    // Prevent form from being submitted
-                    evt.preventDefault()
-
-                    const game = {
-                        maker: newGame.maker,
-                        title: newGame.title,
-                        number_of_players: parseInt(newGame.numberOfPlayers),
-                        skill_level: parseInt(newGame.skillLevel),
-                        game_type: parseInt(newGame.gameTypeId)
-                    }
-
-                    // Send POST request to your API
-                    createGame(game)
-                        .then(() => navigate("/games"))
-                }}
-                className="btn btn-primary">Create</button>
+            <button onClick={changeGameState} className="btn btn-primary">
+                Submit Game
+            </button>
         </form>
     )
 }
