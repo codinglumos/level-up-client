@@ -6,22 +6,33 @@ import { createGame, getGameTypes, getUsers, getGames } from '../../managers/Gam
 export const GameForm = () => {
     const navigate = useNavigate()
     const [games, setGames] = useState([])
-    // const [gameTypes, setGameTypes] = useState([])
-    // const [users, setUsers] = useState([])
+    const [gameTypes, setGameTypes] = useState([])
+    //const [users, setUsers] = useState([])
    
     const [newGame, setNewGame] = useState({
         skillLevel: 0,
         numberOfPlayers: 0,
         title: "",
         maker: "",
-        gameTypeId: 0
+        gameTypeId: 0, 
+        gamer: ""
     })
 
     useEffect(() => {
-        // TODO: Get the games, then set the state
+        
         getGames()
         .then((gameArray) => {
             setGames(gameArray)
+        })
+            
+    }, []
+    )
+
+    useEffect(() => {
+        
+        getGameTypes()
+        .then((gametypeArray) => {
+            setGameTypes(gametypeArray)
         })
             
     }, []
@@ -35,19 +46,10 @@ export const GameForm = () => {
                 numberOfPlayers: newGame.numberOfPlayers,
                 title: newGame.title,
                 maker: newGame.maker,
-                gameTypeId: newGame.gameTypeId        
+                gameTypeId: newGame.gameTypeId, 
+                gamer: newGame.gamer        
         }
         return createGame(gameToAPI)
-        // return fetch("http://localhost:8000/games", {
-        //     method:"POST",
-        //     headers: {
-        //         ,
-        //         "Authorization": `Token ${localStorage.getItem("lu_token")}`
-
-        //     },
-        //     body: JSON.stringify(gameToAPI)
-        // })
-            .then(response => response.json())
             .then(() => {
                navigate("/games")
             })
@@ -70,6 +72,40 @@ export const GameForm = () => {
                         }}
                     />
                 </div>
+                </fieldset>
+                <fieldset>
+                <div className="form-group">
+                    <label htmlFor="maker">Maker: </label>
+                    <input type="text" name="maker" required autoFocus className="form-control"
+                        value={newGame.maker}
+                        onChange={
+                            (evt) => {
+                            const copy = structuredClone(newGame)
+                            copy.maker = evt.target.value
+                            setNewGame(copy)
+                        }}
+                    />
+                </div>
+                </fieldset>
+                <fieldset>
+                <div className="select">
+                    <label className="gametypes" htmlFor="gametypes">Game Type:</label>
+                    <select  placeholder="Choose Game Type" className="form-control" id="gametypes" value={newGame.gametypeId}
+                        onChange={(evt) => {
+                        const copy = structuredClone(newGame)
+                        copy.gametypeId = evt.target.value
+                        setNewGame(copy)
+                        }}>
+                    <option value={gameTypes}></option>
+                            {
+                     gameTypes.map(gametype => {
+                     return <option className="select option" value={newGame?.gametype?.label} key={`gametype--${gametype.id}`}>{gametype.label}</option>
+                        })
+                    }
+                </select>
+                </div>
+            </fieldset>
+                <fieldset>
                 <div className="form-group">
                     <label htmlFor="skillLevel">Skill Level: </label>
                     <input type="number" name="skillLevel" required autoFocus className="form-control"
@@ -81,6 +117,8 @@ export const GameForm = () => {
                         }}
                     />
                 </div>
+                </fieldset>
+                <fieldset>
                 <div className="form-group">
                     <label htmlFor="players">Number of Players: </label>
                     <input type="number" name="players" required autoFocus className="form-control"

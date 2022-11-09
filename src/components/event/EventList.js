@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
-import { getEvents, getGames } from "../../managers/EventManager.js"
+import { getEvents, getGames, deleteEvent } from "../../managers/EventManager.js"
 
 export const EventList = () => {
     const [ events, setEvents ] = useState([])
@@ -30,7 +30,9 @@ export const EventList = () => {
                         {/* <div className="event__description">Let's play {event?.game?.title} organized by {event?.organizer?.username}</div> */}
                         <div className="event__info">Event Details: {event.description}.</div>
                         <div className="event__info">Date: {event.date} at {event.time}</div>
-                        
+                        <button className="update-button" onClick={() => navigate(`/events/${event.id}/edit`)}>Update Event</button>
+                        <button className="delete-button" onClick={() => deleteEvent() .then(navigate(`/events`))}>Delete Event</button>
+
                     </section>
                 })
             }
