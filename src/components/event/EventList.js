@@ -31,7 +31,7 @@ export const EventList = () => {
                         <div className="event__info">Event Details: {event.description}.</div>
                         <div className="event__info">Date: {event.date} at {event.time}</div>
                         <button className="update-button" onClick={() => navigate(`/events/${event.id}/edit`)}>Update Event</button>
-                        <button className="delete-button" onClick={() => deleteEvent() .then(navigate(`/events`))}>Delete Event</button>
+                    <button className="delete-button" onClick={() => deleteEvent(event.id).then(() => {window.location.reload()})}>Delete Event</button>
 
                     </section>
                 })

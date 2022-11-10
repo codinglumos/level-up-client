@@ -47,8 +47,7 @@ export const EventForm = () => {
                 time: newEvent.time, 
                 organizer: newEvent.organizer        
         }
-        return updateEvent(eventToAPI)
-            .then(response => response.json())
+        return createEvent(eventToAPI)
             .then(() => {
                navigate("/events")
             })
@@ -84,7 +83,7 @@ export const EventForm = () => {
                     <option value={games}></option>
                             {
                      games.map(game => {
-                     return <option className="select option" value={newEvent?.game?.title} key={`game--${game.id}`}>{game.title}</option>
+                     return <option className="select option" value={game.id} key={`game--${game.id}`}>{game.title}</option>
                         })
                     }
                 </select>

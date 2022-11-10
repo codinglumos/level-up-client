@@ -66,8 +66,8 @@ export const getEventById = (id) => {
         .then(res => res.json())
 }
 
-export const deleteEvent = (eventId) => {
-    return fetch(`http://localhost:8000/events/${eventId}`, {
+export const deleteEvent = (id) => {
+    return fetch(`http://localhost:8000/events/${id}`, {
         method: "DELETE",
         headers:{
             "Accept": "application/json",

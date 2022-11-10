@@ -5,7 +5,7 @@ import { createEvent, getGameTypes, getEvents, getGames, getEventById, updateEve
 
 export const UpdateEvent = () => {
     const navigate = useNavigate()
-    const {id} = useParams()
+    const {eventId} = useParams()
     const [events, setEvents] = useState([])
     const [games, setGames] = useState([])
 
@@ -17,11 +17,11 @@ export const UpdateEvent = () => {
     useEffect(() => {
         
         getEventById()
-        .then((id) => {
-            setNewEvent(id)
+        .then((eventId) => {
+            setNewEvent(eventId)
         })
             
-    }, [id]
+    }, []
     )
 
     useEffect(() => {
@@ -37,11 +37,11 @@ export const UpdateEvent = () => {
       const updatedEvent = (evt) => {
         evt.preventDefault()
 
-        const updatedEvent = {
+        const editedEvent = {
                 game: newEvent.game,
-                description: newEvent.description,       
+                description: newEvent.description       
         }
-        return updateEvent(updatedEvent)
+        return updateEvent(editedEvent)
             .then(() => {
                navigate("/events")
             })
@@ -76,7 +76,7 @@ export const UpdateEvent = () => {
                     <option value={games}></option>
                             {
                      games.map(game => {
-                     return <option className="select option" value={newEvent?.game?.title} key={`game--${game.id}`}>{game.title}</option>
+                     return <option className="select option" value={game.id} key={`game--${game.id}`}>{game.title}</option>
                         })
                     }
                 </select>

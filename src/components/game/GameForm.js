@@ -48,7 +48,7 @@ export const GameForm = () => {
                 game_type: newGame.gameTypeId, 
                        
         }
-        console.log(gameToAPI)
+        
         return createGame(gameToAPI)
             .then(() => {
                navigate("/games")
