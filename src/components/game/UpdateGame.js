@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from 'react-router-dom'
 import { updateEvent } from "../../managers/EventManager.js"
-import { createGame, getGameTypes, getUsers, getGames, getGameById } from '../../managers/GameManager.js'
+import { createGame, getGameTypes, getUsers, getGames, getGameById, updateGame } from '../../managers/GameManager.js'
 
 
 export const UpdateGame = () => {
     const navigate = useNavigate()
-    const {id} = useParams()
+    const {gameId} = useParams()
     const [gameTypes, setGameTypes] = useState([])
     //const [users, setUsers] = useState([])
    
@@ -14,14 +14,14 @@ export const UpdateGame = () => {
         skillLevel: 0,
         numberOfPlayers: 0,
         title: "",
-        maker: ""
+        maker: "", 
+        gameTypeId: 0
     })
 
     useEffect(() => {
-        
-        getGameById()
-        .then((id) => {
-            setNewGame(id)
+        getGameById(gameId)
+        .then(() => {
+            setNewGame({id:gameId})
         })
             
     }, []
@@ -40,13 +40,15 @@ export const UpdateGame = () => {
       const updatedGame = (evt) => {
         evt.preventDefault()
 
-        const updatedGame = {
-                skillLevel: newGame.skillLevel,
-                numberOfPlayers: newGame.numberOfPlayers,
+        const editedGame = {
+                skill_level: newGame.skillLevel,
+                number_of_players: newGame.numberOfPlayers,
                 title: newGame.title,
-                maker: newGame.maker       
+                maker: newGame.maker,
+                id:newGame.id,
+                game_type: newGame.gameTypeId       
         }
-        return updateEvent(updatedGame)
+        return updateGame(editedGame)
             .then(() => {
                navigate("/games")
             })
@@ -97,6 +99,24 @@ export const UpdateGame = () => {
                     />
                 </div>
                 </fieldset>
+                <fieldset>
+                <div className="select">
+                    <label className="gametypes" htmlFor="gametypes">Game Type:</label>
+                    <select  placeholder="Choose Game Type" className="form-control" id="gametypes" value={newGame.gameTypeId}
+                        onChange={(evt) => {
+                        const copy = structuredClone(newGame)
+                        copy.gameTypeId = evt.target.value
+                        setNewGame(copy)
+                        }}>
+                    <option value={gameTypes}></option>
+                            {
+                     gameTypes.map(gametype => {
+                     return <option className="select option" value={gametype.id} key={`gametype--${gametype.id}`}>{gametype.label}</option>
+                        })
+                    }
+                </select>
+                </div>
+            </fieldset>
                 <fieldset>
                 <div className="form-group">
                     <label htmlFor="players">Number of Players: </label>

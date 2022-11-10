@@ -25,7 +25,7 @@ export const GameList = (props) => {
                         {/* <div className="game__players">{game.number_of_players} players needed</div>
                         <div className="game__skillLevel">Skill level is {game.skill_level}</div> */}
                     <button className="update-button" onClick={() => navigate(`/games/${game.id}/edit`)}>Update Game</button>
-                    <button className="delete-button" onClick={() => deleteGame() .then(navigate(`/games`))}>Delete Game</button>
+                    <button className="delete-button" onClick={() => deleteGame(game.id).then(() => {window.location.reload()})}>Delete Game</button>
 
                     </section>
                 })

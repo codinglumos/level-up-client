@@ -14,8 +14,7 @@ export const GameForm = () => {
         numberOfPlayers: 0,
         title: "",
         maker: "",
-        gameTypeId: 0, 
-        gamer: ""
+        gameTypeId: 0
     })
 
     useEffect(() => {
@@ -42,13 +41,14 @@ export const GameForm = () => {
         evt.preventDefault()
 
         const gameToAPI = {
-                skillLevel: newGame.skillLevel,
-                numberOfPlayers: newGame.numberOfPlayers,
+                skill_level: newGame.skillLevel,
+                number_of_players: newGame.numberOfPlayers,
                 title: newGame.title,
                 maker: newGame.maker,
-                gameTypeId: newGame.gameTypeId, 
-                gamer: newGame.gamer        
+                game_type: newGame.gameTypeId, 
+                       
         }
+        console.log(gameToAPI)
         return createGame(gameToAPI)
             .then(() => {
                navigate("/games")
@@ -90,16 +90,16 @@ export const GameForm = () => {
                 <fieldset>
                 <div className="select">
                     <label className="gametypes" htmlFor="gametypes">Game Type:</label>
-                    <select  placeholder="Choose Game Type" className="form-control" id="gametypes" value={newGame.gametypeId}
+                    <select  placeholder="Choose Game Type" className="form-control" id="gametypes" value={newGame.gameTypeId}
                         onChange={(evt) => {
                         const copy = structuredClone(newGame)
-                        copy.gametypeId = evt.target.value
+                        copy.gameTypeId = evt.target.value
                         setNewGame(copy)
                         }}>
                     <option value={gameTypes}></option>
                             {
                      gameTypes.map(gametype => {
-                     return <option className="select option" value={newGame?.gametype?.label} key={`gametype--${gametype.id}`}>{gametype.label}</option>
+                     return <option className="select option" value={gametype.id} key={`gametype--${gametype.id}`}>{gametype.label}</option>
                         })
                     }
                 </select>

@@ -1,6 +1,8 @@
 export const getEvents = () => {
     return fetch("http://localhost:8000/events", {
         headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         }
     })
@@ -10,6 +12,8 @@ export const getEvents = () => {
 export const getGames = () => {
     return fetch("http://localhost:8000/games", {
         headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         }
     })
@@ -19,6 +23,8 @@ export const getGames = () => {
 export const getUsers = () => {
     return fetch("http://localhost:8000/users", {
         headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         }
     })
@@ -29,6 +35,8 @@ export const createEvent = (event) => {
     return fetch("http://localhost:8000/events", {
         method: "POST",
         headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         },
         body: JSON.stringify(event)
@@ -39,6 +47,8 @@ export const updateEvent = (event) => {
     return fetch(`http://localhost:8000/events/${event.id}`, {
         method: "PUT",
         headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         },
         body: JSON.stringify(event)
@@ -48,6 +58,8 @@ export const updateEvent = (event) => {
 export const getEventById = (id) => {
     return fetch(`http://localhost:8000/events/${id}`, {
         headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         }
     })
@@ -55,9 +67,11 @@ export const getEventById = (id) => {
 }
 
 export const deleteEvent = (eventId) => {
-    return fetch(`http://localhost:8088/events/${eventId}`, {
+    return fetch(`http://localhost:8000/events/${eventId}`, {
         method: "DELETE",
         headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("lu_token")}`
         }
     })
